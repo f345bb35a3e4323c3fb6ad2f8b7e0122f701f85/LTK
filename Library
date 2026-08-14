@@ -2065,7 +2065,7 @@ function library:Init(key)
     keybindButtonLabel:GetPropertyChangedSignal("Text"):Connect(ResizeKeybind)
     ResizeKeybind()
 
-    local ChosenKey = default
+    local ChosenKey = default.Name
 
     keybindButton.MouseButton1Click:Connect(function()
         keybindButtonLabel.Text = "..."
@@ -2087,35 +2087,11 @@ function library:Init(key)
         end
     end)
 
-    --------------------------------------------------------------------
-    -- FIXED CHAT SYSTEM (Legacy + TextChatService)
-    --------------------------------------------------------------------
-
-    local TextChatService = game:GetService("TextChatService")
-    local function isChatFocused()
-        return TextChatService.ChatInputBarConfiguration.TargetTextChannel ~= nil
-    end
-
-    local ChatTextBox = nil
-    local pg = Player:FindFirstChild("PlayerGui")
-    if pg and pg:FindFirstChild("Chat") then
-        local ok, result = pcall(function()
-            return pg.Chat.Frame.ChatBarParentFrame.Frame.BoxFrame.Frame.ChatBar
-        end)
-        if ok then
-            ChatTextBox = result
-        end
-    end
-
     if UserInputService.WindowFocused then
         UserInputService.InputBegan:Connect(function(c, p)
             if not p then
-                local legacyFocused = ChatTextBox and ChatTextBox:IsFocused()
-                local newFocused = isChatFocused()
-
-                if c.KeyCode.Name == ChosenKey and not legacyFocused and not newFocused then
+                if c.KeyCode.Name == ChosenKey then
                     callback(ChosenKey)
-                    return
                 end
             end
         end)
@@ -2138,9 +2114,9 @@ function library:Init(key)
     end
 
     function KeybindFunctions:SetKey(new)
-        new = new or ChosenKey.Name
-        ChosenKey = new.Name
-        keybindButtonLabel.Text = new.Name
+        new = new or ChosenKey
+        ChosenKey = new
+        keybindButtonLabel.Text = new
         return KeybindFunctions
     end
 
