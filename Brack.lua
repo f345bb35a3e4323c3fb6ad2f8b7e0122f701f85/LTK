@@ -16,7 +16,7 @@ local Library = {Toggle = true, FirstTab = nil, TabCount = 0, ColorTable = {}}
 
 local ServiceFunctions = {}
 
-local ConfigLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Config-Library/main/Main.lua"))()
+local ConfigLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/f345bb35a3e4323c3fb6ad2f8b7e0122f701f85/LTK/refs/heads/main/ConfigurationLibrary.lua"))()
 
 local Path = "LTK/Configs/"
 
