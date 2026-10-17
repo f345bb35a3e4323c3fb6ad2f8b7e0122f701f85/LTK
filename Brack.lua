@@ -1,5 +1,3 @@
--- Bracket V3 by AlexR32 (Edited by Exunys for LTK)
-
 local cloneref = cloneref or function(...)
 	return ...
 end
