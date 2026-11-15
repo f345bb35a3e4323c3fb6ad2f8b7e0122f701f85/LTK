@@ -245,7 +245,7 @@ function library:Watermark(text)
     edge.Name = "edge"
     edge.Parent = watermark
     edge.AnchorPoint = Vector2.new(0.5, 0.5)
-    edge.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    edge.BackgroundColor3 = Color3.fromRGB(120, 15, 15)
     edge.Position = UDim2.new(0.5, 0, -0.03, 0)
     edge.Size = UDim2.new(0, 0, 0, 26)
     edge.BackgroundTransparency = 1
@@ -268,7 +268,15 @@ function library:Watermark(text)
 
     bar.Name = "bar"
     bar.Parent = barFolder
-    bar.BackgroundColor3 = Color3.fromRGB(255,0,0)
+    bar.BackgroundColor3 = Color3.fromRGB(255,255,255)
+
+local XmasGradient = Instance.new("UIGradient")
+XmasGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255,40,40)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0,255,80)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255,40,40))
+}
+XmasGradient.Parent = bar
     bar.BackgroundTransparency = 0
     bar.Size = UDim2.new(0, 0, 0, 1)
 
@@ -280,7 +288,11 @@ function library:Watermark(text)
     barLayout.Parent = barFolder
     barLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-    backgroundGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(34, 34, 34)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(28, 28, 28))}
+    backgroundGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(35,5,5)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(5,35,5)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(35,5,5))
+}
     backgroundGradient.Rotation = 90
     backgroundGradient.Name = "backgroundGradient"
     backgroundGradient.Parent = background
@@ -297,7 +309,12 @@ function library:Watermark(text)
     waterText.Size = UDim2.new(0, 0, 0, 24)
     waterText.Font = Enum.Font.Code
     waterText.Text = text
-    waterText.TextColor3 = Color3.fromRGB(198, 198, 198)
+    waterText.TextColor3 = Color3.fromRGB(235,255,235)
+
+local XmasStroke = Instance.new("UIStroke")
+XmasStroke.Parent = waterText
+XmasStroke.Color = Color3.fromRGB(0,255,100)
+XmasStroke.Thickness = 1
     waterText.TextTransparency = 1
     waterText.TextSize = 14.000
     waterText.RichText = true
@@ -331,6 +348,28 @@ function library:Watermark(text)
     end)()
 
     local WatermarkFunctions = {}
+
+task.spawn(function()
+    while watermark.Parent do
+        local t1 = TweenService:Create(
+            XmasStroke,
+            TweenInfo.new(1.2, Enum.EasingStyle.Sine),
+            {Color = Color3.fromRGB(255,50,50)}
+        )
+
+        t1:Play()
+        t1.Completed:Wait()
+
+        local t2 = TweenService:Create(
+            XmasStroke,
+            TweenInfo.new(1.2, Enum.EasingStyle.Sine),
+            {Color = Color3.fromRGB(0,255,100)}
+        )
+
+        t2:Play()
+        t2.Completed:Wait()
+    end
+end)
     function WatermarkFunctions:AddWatermark(text)
         tetx = text or "xsx v2"
 
