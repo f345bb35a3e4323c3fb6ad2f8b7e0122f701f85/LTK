@@ -9,6 +9,15 @@
 local Workspace = game:GetService("Workspace")
 local Player = game:GetService("Players").LocalPlayer
 local Mouse = Player:GetMouse()
+
+-- / Services
+local UserInputService = game:GetService("UserInputService")
+local TextService = game:GetService("TextService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local CoreGuiService
+local ContentService = game:GetService("ContentProvider")
+local TeleportService = game:GetService("TeleportService")
 local ChristmasRed = Color3.fromRGB(235, 30, 50)
 local ChristmasGreen = Color3.fromRGB(25, 190, 75)
 local AccentSpeed = 0.5
@@ -66,14 +75,6 @@ RunService.Heartbeat:Connect(function()
     AccentColor = newColor
 end)
 
--- / Services
-local UserInputService = game:GetService("UserInputService")
-local TextService = game:GetService("TextService")
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
-local CoreGuiService
-local ContentService = game:GetService("ContentProvider")
-local TeleportService = game:GetService("TeleportService")
 
 if gethui then
     CoreGuiService = gethui()
