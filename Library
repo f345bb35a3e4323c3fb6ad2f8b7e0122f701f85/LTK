@@ -20,7 +20,7 @@ local ContentService = game:GetService("ContentProvider")
 local TeleportService = game:GetService("TeleportService")
 local ChristmasRed = Color3.fromRGB(235, 30, 50)
 local ChristmasGreen = Color3.fromRGB(25, 190, 75)
-local AccentSpeed = 0.5
+local AccentSpeed = 1
 local AccentColor = ChristmasRed
 local PureRed = Color3.fromRGB(255, 0, 0)
 
