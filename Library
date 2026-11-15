@@ -309,12 +309,7 @@ XmasGradient.Parent = bar
     waterText.Size = UDim2.new(0, 0, 0, 24)
     waterText.Font = Enum.Font.Code
     waterText.Text = text
-    waterText.TextColor3 = Color3.fromRGB(235,255,235)
-
-local XmasStroke = Instance.new("UIStroke")
-XmasStroke.Parent = waterText
-XmasStroke.Color = Color3.fromRGB(0,255,100)
-XmasStroke.Thickness = 1
+waterText.TextColor3 = Color3.fromRGB(198, 198, 198)
     waterText.TextTransparency = 1
     waterText.TextSize = 14.000
     waterText.RichText = true
@@ -348,28 +343,6 @@ XmasStroke.Thickness = 1
     end)()
 
     local WatermarkFunctions = {}
-
-task.spawn(function()
-    while watermark.Parent do
-        local t1 = TweenService:Create(
-            XmasStroke,
-            TweenInfo.new(1.2, Enum.EasingStyle.Sine),
-            {Color = Color3.fromRGB(255,50,50)}
-        )
-
-        t1:Play()
-        t1.Completed:Wait()
-
-        local t2 = TweenService:Create(
-            XmasStroke,
-            TweenInfo.new(1.2, Enum.EasingStyle.Sine),
-            {Color = Color3.fromRGB(0,255,100)}
-        )
-
-        t2:Play()
-        t2.Completed:Wait()
-    end
-end)
     function WatermarkFunctions:AddWatermark(text)
         tetx = text or "xsx v2"
 
