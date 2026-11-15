@@ -9,6 +9,62 @@
 local Workspace = game:GetService("Workspace")
 local Player = game:GetService("Players").LocalPlayer
 local Mouse = Player:GetMouse()
+local ChristmasRed = Color3.fromRGB(235, 30, 50)
+local ChristmasGreen = Color3.fromRGB(25, 190, 75)
+local AccentSpeed = 0.5
+local AccentColor = ChristmasRed
+local PureRed = Color3.fromRGB(255, 0, 0)
+
+local AccentGuis = {screen = true, watermark = true, Notifications = true, introduction = true}
+local AccentProps = {
+    Frame = {"BackgroundColor3"},
+    TextLabel = {"TextColor3", "BackgroundColor3"},
+    TextButton = {"TextColor3", "BackgroundColor3"},
+    TextBox = {"TextColor3", "BackgroundColor3"},
+    ImageLabel = {"ImageColor3"},
+    ScrollingFrame = {"ScrollBarImageColor3"},
+    UIGradient = {"Color"}
+}
+local AccentTracked = {}
+
+local function NearColor(a, b)
+    return math.abs(a.R - b.R) < 0.004 and math.abs(a.G - b.G) < 0.004 and math.abs(a.B - b.B) < 0.004
+end
+
+local function TrackAccent(obj)
+    local props = AccentProps[obj.ClassName]
+    if not props then return end
+    local gui = obj:FindFirstAncestorOfClass("ScreenGui")
+    if gui and AccentGuis[gui.Name] then
+        AccentTracked[obj] = props
+    end
+end
+CoreGuiService.DescendantAdded:Connect(TrackAccent)
+
+RunService.Heartbeat:Connect(function()
+    local alpha = (math.sin(os.clock() * AccentSpeed) + 1) / 2
+    local newColor = ChristmasRed:Lerp(ChristmasGreen, alpha)
+
+    for obj, props in pairs(AccentTracked) do
+        if not obj.Parent then
+            AccentTracked[obj] = nil
+        elseif obj:IsA("UIGradient") then
+            local first = obj.Color.Keypoints[1].Value
+            if NearColor(first, PureRed) or NearColor(first, AccentColor) then
+                obj.Color = ColorSequence.new(newColor)
+            end
+        else
+            for _, prop in ipairs(props) do
+                local current = obj[prop]
+                if NearColor(current, PureRed) or NearColor(current, AccentColor) then
+                    obj[prop] = newColor
+                end
+            end
+        end
+    end
+
+    AccentColor = newColor
+end)
 
 -- / Services
 local UserInputService = game:GetService("UserInputService")
@@ -245,7 +301,7 @@ function library:Watermark(text)
     edge.Name = "edge"
     edge.Parent = watermark
     edge.AnchorPoint = Vector2.new(0.5, 0.5)
-    edge.BackgroundColor3 = Color3.fromRGB(120, 15, 15)
+    edge.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     edge.Position = UDim2.new(0.5, 0, -0.03, 0)
     edge.Size = UDim2.new(0, 0, 0, 26)
     edge.BackgroundTransparency = 1
@@ -268,15 +324,7 @@ function library:Watermark(text)
 
     bar.Name = "bar"
     bar.Parent = barFolder
-    bar.BackgroundColor3 = Color3.fromRGB(255,255,255)
-
-local XmasGradient = Instance.new("UIGradient")
-XmasGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255,40,40)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0,255,80)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255,40,40))
-}
-XmasGradient.Parent = bar
+    bar.BackgroundColor3 = Color3.fromRGB(255,0,0)
     bar.BackgroundTransparency = 0
     bar.Size = UDim2.new(0, 0, 0, 1)
 
@@ -288,11 +336,7 @@ XmasGradient.Parent = bar
     barLayout.Parent = barFolder
     barLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-    backgroundGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(35,5,5)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(5,35,5)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(35,5,5))
-}
+    backgroundGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(34, 34, 34)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(28, 28, 28))}
     backgroundGradient.Rotation = 90
     backgroundGradient.Name = "backgroundGradient"
     backgroundGradient.Parent = background
@@ -309,7 +353,7 @@ XmasGradient.Parent = bar
     waterText.Size = UDim2.new(0, 0, 0, 24)
     waterText.Font = Enum.Font.Code
     waterText.Text = text
-waterText.TextColor3 = Color3.fromRGB(198, 198, 198)
+    waterText.TextColor3 = Color3.fromRGB(198, 198, 198)
     waterText.TextTransparency = 1
     waterText.TextSize = 14.000
     waterText.RichText = true
