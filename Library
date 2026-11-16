@@ -1077,6 +1077,77 @@ function library:Init(key)
     containerGradient.Name = "containerGradient"
     containerGradient.Parent = container
 
+    -- / Snowfall
+do
+    local SnowAmount = 45 -- number of flakes
+    local SnowSpeed = 1   -- 1 = normal, 2 = double speed
+
+    local snow = Instance.new("Frame")
+    snow.Name = "snow"
+    snow.Parent = background
+    snow.BackgroundTransparency = 1
+    snow.BorderSizePixel = 0
+    snow.Size = UDim2.new(1, 0, 1, 0)
+    snow.ZIndex = 50
+    snow.Active = false
+    snow.ClipsDescendants = true
+
+    local rng = Random.new()
+    local flakes = {}
+
+    local function Respawn(f, initial)
+        local size = background.AbsoluteSize
+        f.x = rng:NextNumber(0, math.max(size.X, 1))
+        f.y = initial and rng:NextNumber(0, math.max(size.Y, 1)) or rng:NextNumber(-20, -4)
+        f.speed = rng:NextNumber(18, 48)
+        f.amp = rng:NextNumber(5, 14)
+        f.freq = rng:NextNumber(0.8, 2)
+        f.phase = rng:NextNumber(0, math.pi * 2)
+    end
+
+    for i = 1, SnowAmount do
+        local flake = Instance.new("Frame")
+        local corner = Instance.new("UICorner")
+        local s = rng:NextInteger(2, 4)
+
+        flake.Name = "flake"
+        flake.Parent = snow
+        flake.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        flake.BackgroundTransparency = rng:NextNumber(0.1, 0.5)
+        flake.BorderSizePixel = 0
+        flake.Size = UDim2.new(0, s, 0, s)
+        flake.ZIndex = 50
+        flake.Active = false
+
+        corner.CornerRadius = UDim.new(1, 0)
+        corner.Parent = flake
+
+        local f = {obj = flake}
+        Respawn(f, true)
+        flakes[i] = f
+    end
+
+    local snowConnection
+    snowConnection = RunService.Heartbeat:Connect(function(dt)
+        if not snow.Parent then
+            snowConnection:Disconnect()
+            return
+        end
+        if not edge.Visible then return end
+
+        local height = background.AbsoluteSize.Y
+        local t = os.clock()
+        for _, f in ipairs(flakes) do
+            f.y = f.y + f.speed * SnowSpeed * dt
+            if f.y > height + 6 then
+                Respawn(f, false)
+            end
+            f.obj.Position = UDim2.new(0, f.x + math.sin(t * f.freq + f.phase) * f.amp, 0, f.y)
+        end
+    end)
+end
+--// end of snow
+
     local TabLibrary = {
         IsFirst = true,
         CurrentTab = ""
